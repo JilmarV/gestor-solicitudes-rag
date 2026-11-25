@@ -87,7 +87,7 @@ MARCA = """
 </div>
 """
 
-EJEMPLOS = ["¿Cómo recupero mi contraseña?", "¿Cuál es el estado de SOL-1003?", "Ya pagué y no aparece, ¿qué hago?",
+EJEMPLOS = ["¿Cómo recupero mi contraseña?", "¿Cuál es el estado de SOL-1003?",
             "¿Cuánto tarda una solicitud?", "¿Cómo presento una queja?", "¿Qué estados puede tener una solicitud?"]
 
 CSS = """
