@@ -6,7 +6,7 @@ Proyecto final de *Inteligencia Artificial Generativa y Sistemas Inteligentes* (
 
 ## Qué hay en este repositorio
 
-| Ruta | Contenido |
+| Ruta | Contenido |   p
 |---|---|
 | `app/` | Aplicación (código, corpus, pruebas) y su **README** con la plantilla de la Clase 12 completa |
 | `app/presentacion_proyecto.pdf` | Presentación de 16 diapositivas |
