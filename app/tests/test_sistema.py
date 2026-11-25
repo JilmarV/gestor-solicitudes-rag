@@ -35,7 +35,8 @@ class FakeStore:
         if self.fallar:
             raise alm.ErrorAlmacenamiento("corpus ilegible")
         self.consultas.append(q)
-        palabras = {w for w in re.findall(r"[a-záéíóúñ0-9]{4,}", q.casefold())}
+        vacias = {"cuál", "cual", "cómo", "como", "para", "esta", "este", "debe", "tiene", "solicitud", "puedo", "hace", "hacer"}   # palabras muy comunes: no cuentan como coincidencia
+        palabras = {w for w in re.findall(r"[a-záéíóúñ0-9]{4,}", q.casefold())} - vacias
         pts = []
         for f in FRAGMENTOS:
             comunes = palabras & set(re.findall(r"[a-záéíóúñ0-9]{4,}", f["content"].casefold()))
@@ -295,3 +296,33 @@ def test_metadata_para_guardar_no_incluye_secretos(mock_mode):
     meta = sis.metadata_para_guardar(r)
     assert {"ruta", "estado", "fuentes", "latencia_ms", "prompts"} <= set(meta)
     assert not re.search(r"sb_|gsk_|eyJ", json.dumps(meta))
+
+
+# ---------------------------------------------------------------- conversación social (sin modelo)
+SOCIALES = [("Hola", "¡Hola!"), ("Buenos días", "¡Buenos días!"), ("buenas tardes!", "¡Buenas tardes!"), ("Buenas noches", "¡Buenas noches!"),
+            ("Hola, ¿cómo estás?", "Muy bien"), ("Muchas gracias", "¡Con gusto!"), ("gracias", "¡Con gusto!"), ("Chao", "¡Hasta luego!"),
+            ("ok", "algo más"), ("¿Qué puedes hacer?", "Puedo ayudarte con"), ("Necesito ayuda", "Puedo ayudarte con"),
+            ("¿Quién eres?", "no una persona"), ("Hola buenos días como estas", "¡Hola!")]
+
+
+@pytest.mark.parametrize("entrada,contiene", SOCIALES)
+def test_conversacion_social_sin_modelo_ni_fuentes(mock_mode, entrada, contiene):
+    r = construir().atender(entrada, SES)
+    assert r["ruta"] == "conversacion" and r["estado"] == "respondida", r["traza"]
+    assert contiene in r["respuesta"] and r["fuentes"] == [] and r["llamadas_llm"] == 0
+
+
+@pytest.mark.parametrize("entrada", ["Hola, ¿cómo recupero mi contraseña?", "gracias, ¿cuál es el estado de SOL-1001?",
+                                     "buenos días, necesito una constancia de estudios", "ok pero no me llegó el correo"])
+def test_saludo_mas_pregunta_no_se_queda_en_saludo(mock_mode, entrada):
+    assert construir().atender(entrada, SES)["ruta"] != "conversacion"
+
+
+def test_pedir_una_persona_deriva_a_revision_humana(mock_mode):
+    r = construir().atender("Quiero hablar con una persona", SES)
+    assert (r["ruta"], r["estado"]) == ("humano", "derivada") and r["llamadas_llm"] == 0
+
+
+def test_respuesta_social_no_dispara_con_mensajes_largos_o_vacios():
+    assert sis.respuesta_social("") is None and sis.respuesta_social("   ") is None
+    assert sis.respuesta_social("hola " * 12) is None

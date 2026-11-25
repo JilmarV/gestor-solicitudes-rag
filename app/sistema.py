@@ -336,6 +336,77 @@ def es_vaga(texto: str) -> bool:
     return len(sig) < 2
 
 
+# --------------------------------------------------------------------------- conversación social (sin modelo ni fuentes)
+MENU_AYUDA = ("Puedo ayudarte con: acceso y contraseñas, constancias, pagos, quejas, el estado de una solicitud (con su código SOL-0000), "
+              "tipos y prioridades, plazos, responsables y privacidad. Por ejemplo: «¿Cómo recupero mi contraseña?» o «¿Cuál es el estado de SOL-1001?».")
+
+_FRASES_SOCIALES = {
+    "saludo": ["hola", "holi", "holis", "hey", "ey", "buenas", "buen dia", "buenos dias", "buenas tardes", "buenas noches", "saludos", "hello", "hi",
+               "que tal", "muy buenos dias", "muy buenas tardes", "muy buenas noches", "buenos dias a todos"],
+    "estado": ["como estas", "como esta", "como vas", "como te va", "como amaneciste", "que mas", "que hubo", "todo bien", "como te encuentras", "como andas"],
+    "gracias": ["muchas gracias", "mil gracias", "gracias", "te agradezco", "se agradece", "muy amable", "gracias por tu ayuda", "gracias por la ayuda"],
+    "despedida": ["hasta luego", "hasta pronto", "hasta manana", "nos vemos", "chao", "chau", "adios", "bye", "que tengas buen dia", "feliz dia", "feliz tarde"],
+    "afirmacion": ["ok", "okay", "vale", "listo", "entendido", "perfecto", "de acuerdo", "claro", "dale", "bien", "excelente", "genial", "super", "ya", "entiendo"],
+    "ayuda": ["necesito ayuda", "me puedes ayudar", "me ayudas", "puedes ayudarme", "me podrias ayudar", "ayuda", "ayudame", "en que me puedes ayudar",
+              "en que me ayudas", "que puedes hacer", "que haces", "para que sirves", "que sabes hacer", "como funcionas", "menu", "opciones", "que temas manejas"],
+    "identidad": ["quien eres", "como te llamas", "eres un bot", "eres una persona", "eres humano", "que eres", "eres real", "eres una ia", "eres inteligencia artificial"],
+    "persona": ["quiero hablar con una persona", "quiero hablar con un humano", "quiero hablar con alguien", "necesito hablar con una persona",
+                "necesito hablar con un humano", "necesito hablar con un asesor", "quiero hablar con un asesor", "comunicame con una persona", "pasame con una persona"],
+}
+_RELLENO = ["a todos", "a todas", "equipo", "amigo", "amiga", "bot", "asistente", "gestor", "ahi", "por favor", "de nuevo", "otra vez", "tambien", "y", "que", "pues", "entonces"]
+_FRASES_ORDENADAS = sorted([(f, c) for c, fs in _FRASES_SOCIALES.items() for f in fs] + [(f, None) for f in _RELLENO], key=lambda x: -len(x[0]))
+
+
+def _plano(t: str) -> str:
+    t = unicodedata.normalize("NFKD", t.casefold())
+    t = "".join(ch for ch in t if not unicodedata.combining(ch))
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9 ]+", " ", t)).strip()
+
+
+def respuesta_social(texto: str) -> Optional[dict]:
+    """Saludos, gracias, despedidas, 'qué puedes hacer'… Solo si TODO el mensaje es social: «hola» sí; «hola, ¿cómo recupero mi contraseña?» NO."""
+    s = _plano(texto)
+    if not s or len(s.split()) > 9:
+        return None
+    cats, saludo = [], ""
+    while s:
+        for frase, cat in _FRASES_ORDENADAS:
+            if s == frase or s.startswith(frase + " "):
+                if cat:
+                    cats.append(cat)
+                    if cat == "saludo" and not saludo:
+                        saludo = frase
+                s = s[len(frase):].strip()
+                break
+        else:
+            return None
+    if not cats:
+        return None
+    if "persona" in cats:
+        return {"ruta": "humano", "estado": "derivada", "categorias": cats,
+                "texto": "Tu caso requiere revisión de una persona del equipo. Ya quedó marcado para revisión humana; el equipo trabaja de lunes a viernes, de 8:00 a 17:00."}
+    if "ayuda" in cats:
+        texto_r = "¡Claro! " + MENU_AYUDA
+    elif "identidad" in cats:
+        texto_r = "Soy el asistente del gestor de solicitudes: un programa de inteligencia artificial, no una persona. " + MENU_AYUDA
+    else:
+        partes = []
+        if "saludo" in cats:
+            partes.append("¡Buenos días!" if "dias" in saludo else "¡Buenas tardes!" if "tardes" in saludo else "¡Buenas noches!" if "noches" in saludo else "¡Hola!")
+        if "estado" in cats:
+            partes.append("Muy bien, gracias por preguntar.")
+        if "gracias" in cats:
+            partes.append("¡Con gusto!")
+        if "despedida" in cats:
+            partes.append("¡Hasta luego! Aquí estaré si necesitas algo más.")
+        elif "saludo" in cats or "estado" in cats:
+            partes.append("Soy el asistente del gestor de solicitudes. " + MENU_AYUDA)
+        else:
+            partes.append("¿Hay algo más en lo que pueda ayudarte?")
+        texto_r = " ".join(partes)
+    return {"ruta": "conversacion", "estado": "respondida", "categorias": cats, "texto": texto_r}
+
+
 def decidir_ruta(texto: str, clasif: Solicitud) -> tuple[str, str]:
     t = normalizar(texto)
     cod = re.search(r"SOL-[0-9]{4}", texto)
@@ -437,7 +508,7 @@ class Sistema:
     def generar_respuesta(self, consulta: str, rec: dict, log: list) -> dict:
         if rec["sim_max"] < CONFIG["umbral_similitud"]:
             return {"estado": "evidencia_insuficiente", "origen": "umbral",
-                    "respuesta": "No encontré información en los documentos para responder eso. Puedo ayudarte con acceso, constancias, tipos, prioridades y responsables.",
+                    "respuesta": "No encontré información en los documentos para responder eso. Puedo ayudarte con acceso, constancias, pagos, quejas, seguimiento de solicitudes, tipos, prioridades, plazos, responsables y privacidad.",
                     "fuentes": [], "limitacion": f"similitud máxima {rec['sim_max']:.2f} < umbral {CONFIG['umbral_similitud']}"}
         etiquetas, ctx = self._armar_contexto(rec)
         if CONFIG["modo_llm"] != "groq":
@@ -518,6 +589,10 @@ class Sistema:
             traza.append(("sanitizar", s["alertas"] or "ok"))
             if not s["ok"]:
                 return fin("rechazo", "rechazada", s["motivo"], extra={"alertas": s["alertas"]})
+            social = respuesta_social(s["texto"])
+            if social:
+                traza.append(("conversacion", social["categorias"]))
+                return fin(social["ruta"], social["estado"], social["texto"])
             consulta = consulta_efectiva(s["texto"], historial)
             if consulta != s["texto"]:
                 traza.append(("consulta_efectiva", "unida con la pregunta anterior (aclaración)"))
@@ -548,7 +623,7 @@ class Sistema:
                            extra={"clasificacion": clasif.model_dump(), "mcp": self.mcp.modo})
             if ruta == "aclaracion":
                 msg = ("Para consultar el estado necesito el código de tu solicitud (formato SOL-0000)." if "estado" in normalizar(consulta)
-                       else "¿Puedes dar más detalle? Por ejemplo: ¿se trata de acceso, constancias, prioridades o responsables?")
+                       else "¿Puedes dar más detalle? Por ejemplo: ¿se trata de acceso, constancias, pagos, quejas, plazos o el estado de una solicitud?")
                 return fin("aclaracion", "aclaracion", msg, extra={"clasificacion": clasif.model_dump()})
             rec = self.recuperar(consulta, sesion, log)
             traza.append(("recuperar", CONFIG["opcion_recuperacion"], rec["ranking"], round(rec["sim_max"], 3)))

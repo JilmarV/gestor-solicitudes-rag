@@ -3,7 +3,7 @@
     "titulo": "Tipos de solicitud",
     "tema": "clasificación",
     "origen": "redactado por el equipo",
-    "version": "1.0-didactica",
+    "version": "1.2-ampliada",
     "licencia": "Uso académico del equipo; contenido ficticio",
     "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
     "idioma": "es"
@@ -12,7 +12,7 @@
     "titulo": "Prioridades de atención",
     "tema": "priorización",
     "origen": "redactado por el equipo",
-    "version": "1.0-didactica",
+    "version": "1.2-ampliada",
     "licencia": "Uso académico del equipo; contenido ficticio",
     "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
     "idioma": "es"
@@ -21,7 +21,7 @@
     "titulo": "Responsables por área",
     "tema": "enrutamiento",
     "origen": "redactado por el equipo",
-    "version": "1.0-didactica",
+    "version": "1.2-ampliada",
     "licencia": "Uso académico del equipo; contenido ficticio",
     "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
     "idioma": "es"
@@ -30,7 +30,7 @@
     "titulo": "Manual de acceso",
     "tema": "acceso",
     "origen": "redactado por el equipo",
-    "version": "1.0-didactica",
+    "version": "1.2-ampliada",
     "licencia": "Uso académico del equipo; contenido ficticio",
     "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
     "idioma": "es"
@@ -39,7 +39,79 @@
     "titulo": "Manual de constancias",
     "tema": "documentos",
     "origen": "redactado por el equipo",
-    "version": "1.0-didactica",
+    "version": "1.2-ampliada",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  },
+  "pagos.md": {
+    "titulo": "Manual de pagos",
+    "tema": "pagos",
+    "origen": "redactado por el equipo",
+    "version": "1.2-ampliada",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  },
+  "quejas.md": {
+    "titulo": "Manual de quejas",
+    "tema": "quejas",
+    "origen": "redactado por el equipo",
+    "version": "1.2-ampliada",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  },
+  "seguimiento.md": {
+    "titulo": "Seguimiento de solicitudes",
+    "tema": "seguimiento",
+    "origen": "redactado por el equipo",
+    "version": "1.2-ampliada",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  },
+  "tiempos_atencion.md": {
+    "titulo": "Tiempos de atención",
+    "tema": "plazos",
+    "origen": "redactado por el equipo",
+    "version": "1.2-ampliada",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  },
+  "canales_atencion.md": {
+    "titulo": "Canales y jornada de atención",
+    "tema": "canales",
+    "origen": "redactado por el equipo",
+    "version": "1.2-ampliada",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  },
+  "privacidad.md": {
+    "titulo": "Privacidad y datos personales",
+    "tema": "privacidad",
+    "origen": "redactado por el equipo",
+    "version": "1.2-ampliada",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  },
+  "ejemplos_solicitudes.md": {
+    "titulo": "Ejemplos de solicitudes",
+    "tema": "ejemplos",
+    "origen": "redactado por el equipo",
+    "version": "1.2-ampliada",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  },
+  "glosario.md": {
+    "titulo": "Glosario",
+    "tema": "glosario",
+    "origen": "redactado por el equipo",
+    "version": "1.2-ampliada",
     "licencia": "Uso académico del equipo; contenido ficticio",
     "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
     "idioma": "es"
