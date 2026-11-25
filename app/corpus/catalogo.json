@@ -1,0 +1,47 @@
+{
+  "tipos_solicitud.md": {
+    "titulo": "Tipos de solicitud",
+    "tema": "clasificación",
+    "origen": "redactado por el equipo",
+    "version": "1.0-didactica",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  },
+  "prioridades.md": {
+    "titulo": "Prioridades de atención",
+    "tema": "priorización",
+    "origen": "redactado por el equipo",
+    "version": "1.0-didactica",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  },
+  "responsables.md": {
+    "titulo": "Responsables por área",
+    "tema": "enrutamiento",
+    "origen": "redactado por el equipo",
+    "version": "1.0-didactica",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  },
+  "acceso.md": {
+    "titulo": "Manual de acceso",
+    "tema": "acceso",
+    "origen": "redactado por el equipo",
+    "version": "1.0-didactica",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  },
+  "constancias.md": {
+    "titulo": "Manual de constancias",
+    "tema": "documentos",
+    "origen": "redactado por el equipo",
+    "version": "1.0-didactica",
+    "licencia": "Uso académico del equipo; contenido ficticio",
+    "privacidad": "Sin datos personales; códigos SOL-xxxx ficticios",
+    "idioma": "es"
+  }
+}

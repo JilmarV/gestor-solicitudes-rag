@@ -1,0 +1,14 @@
+# Dependencias de app/ — instalar con:  pip install -r requirements.txt
+# Verificadas (instalación y pruebas offline) en Python 3.13 / Linux, 16-nov-2026:
+gradio==6.32.0
+supabase==2.32.0
+groq==1.7.0
+pydantic==2.13.5
+mcp==1.30.0
+python-dotenv==1.2.4
+numpy>=2.0
+# Verificadas por el equipo en Colab (notebooks Clases 07-09 y consolidado):
+sentence-transformers==6.1.0
+# torch lo instala sentence-transformers. En Render/Linux conviene la versión CPU (mucho más liviana):
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
