@@ -318,6 +318,17 @@ def test_saludo_mas_pregunta_no_se_queda_en_saludo(mock_mode, entrada):
     assert construir().atender(entrada, SES)["ruta"] != "conversacion"
 
 
+def test_pregunta_de_seguimiento_se_une_al_tema_anterior(mock_mode):
+    hist = [{"rol": "user", "contenido": "quiero radicar una queja a donde me dirijo?"},
+            {"rol": "assistant", "contenido": "Dirígete a la coordinación del servicio.", "metadata": {"estado": "respondida"}}]
+    sistema = construir()
+    sola = sistema.atender("a que horas puedo ir?", SES)
+    con_hilo = sistema.atender("a que horas puedo ir?", SES, hist)
+    assert sola["ruta"] == "aclaracion"
+    assert con_hilo["ruta"] != "aclaracion" and "queja" in dict(
+        (t[0], t[1]) for t in con_hilo["traza"])["consulta_efectiva"]
+
+
 def test_pedir_una_persona_deriva_a_revision_humana(mock_mode):
     r = construir().atender("Quiero hablar con una persona", SES)
     assert (r["ruta"], r["estado"]) == ("humano", "derivada") and r["llamadas_llm"] == 0
