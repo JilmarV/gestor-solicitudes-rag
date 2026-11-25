@@ -358,7 +358,8 @@ def main() -> None:
         log.error("Configuración incompleta: %s", e)
         sys.exit(1)
     demo = crear_app(almacen)
-    host = os.environ.get("GRADIO_SERVER_NAME", "127.0.0.1")
+    # En alojamiento (Render define PORT) hay que escuchar en todas las interfaces.
+    host = os.environ.get("GRADIO_SERVER_NAME") or ("0.0.0.0" if os.environ.get("PORT") else "127.0.0.1")
     puerto = int(os.environ.get("PORT", "7860"))
     log.info("Arrancando en %s:%s (modo_llm=%s, mcp=%s)", host, puerto, sis.CONFIG["modo_llm"], sis.CONFIG["mcp_modo"])
     demo.launch(server_name=host, server_port=puerto, show_error=False, theme=TEMA, css=CSS,
